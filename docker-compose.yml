@@ -1,6 +1,17 @@
 version: '3'
 
 services:
+    node:
+        depends_on:
+        - redis
+    redis:
+    image: redis:7.0-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+
     nginx:
         image: nginx:1.25.4
         ports:
@@ -44,3 +55,4 @@ services:
 volumes:
     grafana_config:
         driver: local
+    redis_data:
