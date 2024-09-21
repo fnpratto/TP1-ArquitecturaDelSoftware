@@ -1,14 +1,14 @@
 import express from 'express';
-import redis from 'redis';
+//import redis from 'redis';
 
 const app = express();
 const port = 3000;
 
-const client = redis.createClient();
+//const client = redis.createClient();
 
-client.on('error', (err) => console.log('Redis Client Error', err));
+//client.on('error', (err) => console.log('Redis Client Error', err));
 
-client.connect();
+//client.connect();
 
 //ENDPOINT PING
 
