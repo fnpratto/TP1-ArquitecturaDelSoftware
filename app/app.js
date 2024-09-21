@@ -15,7 +15,7 @@ const port = 3000;
 app.get('/ping', (req, res) => {
   res.send('pong');
 });
-
+console.log("trying!")
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
