@@ -1,15 +1,28 @@
 services:
-    node:
+    app:
         build: ./app/
-    node2:
-        build: ./app/
-    node3:
-        build: ./app/
-    node4:
-        build: ./app/
+        depends_on:
+        - redis
+
+    redis:
+        image: redis:7.0-alpine
         ports:
-        - "3000:3000"
-    node5:
-        build: ./app/
-    node6:
-        build: ./app/
+            - "6379:6379"
+        volumes:
+            - redis_data:/data
+
+
+    nginx:
+        image: nginx:1.25.4
+        ports:
+            - "5555:80"
+        volumes:
+            - ./nginx_reverse_proxy.conf:/etc/nginx/conf.d/default.conf
+            - ./store/static/files:/static
+        depends_on:
+            - app
+
+volumes:
+    grafana_config:
+        driver: local
+    redis_data:
