@@ -2,14 +2,18 @@ version: '3'
 
 services:
     node:
+        build:
+            context: .
+            dockerfile: ./app/Dockerfile
         depends_on:
         - redis
+
     redis:
-    image: redis:7.0-alpine
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
+        image: redis:7.0-alpine
+        ports:
+            - "6379:6379"
+        volumes:
+            - redis_data:/data
 
 
     nginx:

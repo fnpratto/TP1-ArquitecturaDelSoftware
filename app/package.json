@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "> **La fecha de entrega para el informe y el código es el jueves 03/10** :bangbang:",
   "main": "statsd.config.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
