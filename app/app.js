@@ -1,4 +1,5 @@
 import express from 'express';
+import https from 'https';
 //import redis from 'redis';
 
 const app = express();
@@ -15,6 +16,28 @@ const port = 3000;
 app.get('/ping', (req, res) => {
   res.send('pong');
 });
+
+app.get('/quote', (req, res) => {
+
+  https.get('https://api.quotable.io/quotes/random', res => {
+    let data = [];
+    const headerDate = res.headers && res.headers.date ? res.headers.date : 'no response date';
+    console.log('Status Code:', res.statusCode);
+    console.log('Date in Response header:', headerDate);
+
+    res.on('data', chunk => {
+      data.push(chunk);
+    });
+
+    res.on('end', () => {
+      console.log(`${data}`);
+    });
+  }).on('error', err => {
+    console.log('Error: ', err.message);
+    res.send('Kaboom!')
+  });
+});
+
 console.log("trying!")
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
