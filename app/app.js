@@ -19,26 +19,27 @@ app.get('/ping', (req, res) => {
 
 app.get('/quote', (req, res) => {
 
-  https.get('https://api.quotable.io/quotes/random', res => {
+  // test outgoing request
+  https.get('https://zenquotes.io/api/random', _res => {
     let data = [];
-    const headerDate = res.headers && res.headers.date ? res.headers.date : 'no response date';
-    console.log('Status Code:', res.statusCode);
+    const headerDate = _res.headers && _res.headers.date ? _res.headers.date : 'no response date';
+    console.log('Status Code:', _res.statusCode);
     console.log('Date in Response header:', headerDate);
 
-    res.on('data', chunk => {
+    _res.on('data', chunk => {
       data.push(chunk);
     });
 
-    res.on('end', () => {
+    _res.on('end', () => {
       console.log(`${data}`);
+      res.send(`${data}`)
     });
   }).on('error', err => {
     console.log('Error: ', err.message);
-    res.send('Kaboom!')
+    res.send("Error!")
   });
 });
 
-console.log("trying!")
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
