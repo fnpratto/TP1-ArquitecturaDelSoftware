@@ -37,10 +37,9 @@ services:
         ports:
             - "80:3000"
         volumes:
-            - "grafana_config:/var/lib/grafana"
-
-
+            - type: bind
+              source: /home/flor/tp1/perf/dashboard.json
+              target: /var/lib/grafana/dashboard.json
+        
 volumes:
-    grafana_config:
-        driver: local
     redis_data:
