@@ -15,12 +15,30 @@ services:
     nginx:
         image: nginx:1.25.4
         ports:
-            - "8080:80"
+            - "5555:80"
         volumes:
             - ./nginx_reverse_proxy.conf:/etc/nginx/conf.d/default.conf
             - ./store/static/files:/static
         depends_on:
             - app
+
+    graphite:
+        image: graphiteapp/graphite-statsd:1.1.10-5
+        volumes:
+            - ./statsd.config.js:/opt/statsd/config/udp.js
+            - ./graphite.storage-schemas.conf:/opt/graphite/conf/storage-schemas.conf
+        ports:
+            - "8090:80"
+            - "8125:8125/udp"
+            - "8126:8126"
+
+    grafana:
+        image: grafana/grafana:10.1.9
+        ports:
+            - "80:3000"
+        volumes:
+            - "grafana_config:/var/lib/grafana"
+
 
 volumes:
     grafana_config:

@@ -60,11 +60,3 @@ app.listen(port, () => {
 //     res.json(titles);
 // });
 
-
-// //
-// app.get('/quote', async (req, res) => {
-//     const response = await axios.get('https://api.quotable.io/random');
-//     const { content, author } = response.data;
-//     res.json({ content, author });
-//   });
-  
