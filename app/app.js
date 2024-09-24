@@ -1,15 +1,60 @@
 import express from 'express';
+import dgram from 'dgram' ;
 import https from 'https';
-//import redis from 'redis';
-
 const app = express();
 const port = 3000;
 
-//const client = redis.createClient();
 
-//client.on('error', (err) => console.log('Redis Client Error', err));
+const sendMessage = (client, message) => {
+  return new Promise((resolve,reject)=> {
+    client.send(message,8125,'localhost',(err)=>{
+      if(err){
+        reject(err);
+      } else {
+        resolve ('Message sent: ${message.toString()}');
+      }
+    });
+  });
+};
 
-//client.connect();
+
+const sendMessageWithTimeout = async (client, duration) => {
+const endTime = Date.now() + duration;
+
+const sendRepeatedMessage = async () => {
+  if (Date.now() >= endTime){
+    client.close();
+    return;
+  }
+
+  const randomValue = Math.floor(Math.random()*100);
+  const message = Buffer.from ('example:${randomValue} c');
+
+  try{
+    const result = await sendMessage(client,message);
+    console.log (result);
+  } catch (err){
+    console.log ('Error: ',err);
+  }
+
+  setTimeout(sendRepeatedMessage,1000);
+};
+
+
+sendRepeatedMessage();
+};
+
+//ENDPOINT 
+
+app.get('/udp', (req, res) => {
+  const client = dgram.createSocket('udp4');
+  const duration = 10*1000;
+
+  sendMessageWithTimeout(client,duration);
+
+  res.send('Started sending messages for 10 seconds');
+});
+
 
 //ENDPOINT PING
 
@@ -43,6 +88,10 @@ app.get('/quote', (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
 });
+
+
+
+
 
 
 // API FREE DIRECRIONARY
