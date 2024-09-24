@@ -2,7 +2,7 @@ services:
     app:
         build: ./app/
         depends_on:
-        - redis
+            - redis
 
     redis:
         image: redis:7.0-alpine
@@ -10,7 +10,6 @@ services:
             - "6379:6379"
         volumes:
             - redis_data:/data
-
 
     nginx:
         image: nginx:1.25.4
@@ -38,8 +37,8 @@ services:
             - "80:3000"
         volumes:
             - type: bind
-              source: /home/flor/tp1/perf/dashboard.json
+              source: ./perf/dashboard.json
               target: /var/lib/grafana/dashboard.json
-        
+
 volumes:
     redis_data:
