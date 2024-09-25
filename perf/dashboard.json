@@ -399,7 +399,7 @@
             "renderer": "flot",
             "seriesOverrides": [
                 {
-                    "alias": "asPercent(stats.gauges.cadvisor.tp1-arquitecturadesoftware-node-1.memory_usage, 34359738368)",
+                    "alias": "asPercent(stats.gauges.cadvisor.tp1-arquitecturadelsoftware-app-1.memory_usage, 34359738368)",
                     "yaxis": 1
                 }
             ],
@@ -497,8 +497,8 @@
                 "allValue": null,
                 "current": {
                     "selected": false,
-                    "text": "tp1-arquitecturadesoftware-node-1",
-                    "value": "tp1-arquitecturadesoftware-node-1"
+                    "text": "tp1-arquitecturadelsoftware-app-1",
+                    "value": "tp1-arquitecturadelsoftware-app-1"
                 },
                 "error": null,
                 "hide": 0,
@@ -509,41 +509,41 @@
                 "options": [
                     {
                         "selected": true,
-                        "text": "tp1-arquitecturadesoftware-node-1",
-                        "value": "tp1-arquitecturadesoftware-node-1"
+                        "text": "tp1-arquitecturadelsoftware-app-1",
+                        "value": "tp1-arquitecturadelsoftware-app-1"
                     },
                     {
                         "selected": false,
-                        "text": "tp1-arquitecturadesoftware-node-2",
-                        "value": "tp1-arquitecturadesoftware-node-2"
+                        "text": "tp1-arquitecturadelsoftware-app-2",
+                        "value": "tp1-arquitecturadelsoftware-app-2"
                     },
                     {
                         "selected": false,
-                        "text": "tp1-arquitecturadesoftware-node-3",
-                        "value": "tp1-arquitecturadesoftware-node-3"
+                        "text": "tp1-arquitecturadelsoftware-app-3",
+                        "value": "tp1-arquitecturadelsoftware-app-3"
                     },
                     {
                         "selected": false,
-                        "text": "tp1-arquitecturadesoftware-cadvisor-1",
-                        "value": "tp1-arquitecturadesoftware-cadvisor-1"
+                        "text": "tp1-arquitecturadelsoftware-cadvisor-1",
+                        "value": "tp1-arquitecturadelsoftware-cadvisor-1"
                     },
                     {
                         "selected": false,
-                        "text": "tp1-arquitecturadesoftware-grafana-1",
-                        "value": "tp1-arquitecturadesoftware-grafana-1"
+                        "text": "tp1-arquitecturadelsoftware-grafana-1",
+                        "value": "tp1-arquitecturadelsoftware-grafana-1"
                     },
                     {
                         "selected": false,
-                        "text": "tp1-arquitecturadesoftware-graphite-1",
-                        "value": "tp1-arquitecturadesoftware-graphite-1"
+                        "text": "tp1-arquitecturadelsoftware-graphite-1",
+                        "value": "tp1-arquitecturadelsoftware-graphite-1"
                     },
                     {
                         "selected": false,
-                        "text": "tp1-arquitecturadesoftware-nginx-1",
-                        "value": "tp1-arquitecturadesoftware-nginx-1"
+                        "text": "tp1-arquitecturadelsoftware-nginx-1",
+                        "value": "tp1-arquitecturadelsoftware-nginx-1"
                     }
                 ],
-                "query": "tp1-arquitecturadesoftware-node-1, tp1-arquitecturadesoftware-node-2, tp1-arquitecturadesoftware-node-3, tp1-arquitecturadesoftware-cadvisor-1, tp1-arquitecturadesoftware-grafana-1, tp1-arquitecturadesoftware-graphite-1,  tp1-arquitecturadesoftware-nginx-1, tp1-arquitecturadesoftware-bbox-1",
+                "query": "tp1-arquitecturadelsoftware-app-1, tp1-arquitecturadelsoftware-app-2, tp1-arquitecturadelsoftware-app-3, tp1-arquitecturadelsoftware-cadvisor-1, tp1-arquitecturadelsoftware-grafana-1, tp1-arquitecturadelsoftware-graphite-1,  tp1-arquitecturadelsoftware-nginx-1, tp1-arquitecturadelsoftware-bbox-1",
                 "queryValue": "",
                 "skipUrlSync": false,
                 "type": "custom"
