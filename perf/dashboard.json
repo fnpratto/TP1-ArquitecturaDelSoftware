@@ -473,8 +473,8 @@
                 "allValue": null,
                 "current": {
                     "selected": false,
-                    "text": "artillery-api",
-                    "value": "artillery-api"
+                    "text": "artillery-app",
+                    "value": "artillery-app"
                 },
                 "error": null,
                 "hide": 0,
@@ -485,11 +485,11 @@
                 "options": [
                     {
                         "selected": true,
-                        "text": "artillery-api",
-                        "value": "artillery-api"
+                        "text": "artillery-app",
+                        "value": "artillery-app"
                     }
                 ],
-                "query": "artillery-api",
+                "query": "artillery-app",
                 "skipUrlSync": false,
                 "type": "custom"
             },
