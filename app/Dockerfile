@@ -1,4 +1,4 @@
-FROM node:18
+FROM node
 RUN mkdir /usr/src/app
 WORKDIR /usr/src/app
 COPY app.js package.json package-lock.json ./

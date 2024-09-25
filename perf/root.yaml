@@ -23,4 +23,4 @@ scenarios:
     - name: Root (/)
       flow:
           - get:
-                url: "/ping"
+                url: "/"
