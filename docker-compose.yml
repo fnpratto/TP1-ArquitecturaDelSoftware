@@ -1,15 +1,6 @@
 services:
     app:
         build: ./app/
-        depends_on:
-            - redis
-
-    redis:
-        image: redis:7.0-alpine
-        ports:
-            - "6379:6379"
-        volumes:
-            - redis_data:/data
 
     nginx:
         image: nginx:1.25.4
@@ -36,11 +27,6 @@ services:
         ports:
             - "80:3000"
         volumes:
-            # - type: bind
-            #   source: ./perf/dashboard.json
-            #   target: /var/lib/grafana/dashboard.json
-
-            # - "./perf/dashboard.json:/var/lib/grafana/dashboard.json"
             - "grafana_config:/var/lib/grafana"
 
     cadvisor:
@@ -59,4 +45,3 @@ services:
 volumes:
     grafana_config:
         driver: local
-    redis_data:
