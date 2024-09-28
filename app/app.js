@@ -63,7 +63,7 @@ app.get("/ping", (req, res) => {
 app.get("/quote", (req, res) => {
     // test outgoing request
     https
-        .get("https://zenquotes.io/api/random", (_res) => {
+        .get("https://uselessfacts.jsph.pl/api/v2/facts/random", (_res) => {
             let data = [];
             const headerDate =
                 _res.headers && _res.headers.date
@@ -77,8 +77,16 @@ app.get("/quote", (req, res) => {
             });
 
             _res.on("end", () => {
-                console.log(`${data}`);
-                res.send(`${data}`);
+                const responseData = Buffer.concat(data).toString();
+                console.log(responseData);
+
+                try {
+                    const jsonResponse = JSON.parse(responseData);
+                    res.send(jsonResponse.text);
+                } catch (error) {
+                    console.error("JSON parsing error:", error);
+                    res.status(500).send("Error parsing response data");
+                }
             });
         })
         .on("error", (err) => {
