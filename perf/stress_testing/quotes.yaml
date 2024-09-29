@@ -1,0 +1,31 @@
+config:
+    environments:
+        app:
+            target: "http://localhost:5555"
+            plugins:
+                statsd:
+                    host: localhost
+                    port: 8125
+                    prefix: "artillery-app"
+
+    pool: 50 # All HTTP requests from all virtual users will be sent over the same connections
+
+    phases:
+        - name: WarmUp
+          duration: 30
+          arrivalRate: 5
+        - name: Ramp
+          duration: 30
+          arrivalRate: 5
+          rampTo: 400
+        - name: Plain
+          duration: 60
+          arrivalRate: 400
+        - name: CoolDown
+          duration: 30
+
+scenarios:
+    - name: quotes (/quotes)
+      flow:
+          - get:
+                url: "/quotes"
