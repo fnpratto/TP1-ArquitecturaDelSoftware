@@ -60,31 +60,17 @@ app.get("/ping", (req, res) => {
     res.send("pong");
 });
 
-app.get("/quote", (req, res) => {
-    // test outgoing request
-    https
-        .get("https://zenquotes.io/api/random", (_res) => {
-            let data = [];
-            const headerDate =
-                _res.headers && _res.headers.date
-                    ? _res.headers.date
-                    : "no response date";
-            console.log("Status Code:", _res.statusCode);
-            console.log("Date in Response header:", headerDate);
+app.get("/quote", async (req, res) => {
+    const response = await axios.get(
+        "https://uselessfacts.jsph.pl/api/v2/facts/random"
+    );
 
-            _res.on("data", (chunk) => {
-                data.push(chunk);
-            });
-
-            _res.on("end", () => {
-                console.log(`${data}`);
-                res.send(`${data}`);
-            });
-        })
-        .on("error", (err) => {
-            console.log("Error: ", err.message);
-            res.send("Error!");
-        });
+    if (response.status === 200) {
+        console.log(response.data);
+        res.status(200).send(response.data["text"]);
+    } else {
+        res.status(response.status).send(response.statusText);
+    }
 });
 
 app.get("/spaceflight_news", async (req, res) => {
@@ -119,6 +105,6 @@ app.get("/dictionary", async (req, res) => {
     if (response.status === 200) {
         res.status(200).send(response.data[0]);
     } else {
-        res.status.apply(response.status).send(response.statusText);
+        res.status(response.status).send(response.statusText);
     }
 });
