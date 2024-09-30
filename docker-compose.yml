@@ -1,6 +1,11 @@
 services:
     app:
         build: ./app/
+        links:
+            - redis
+
+    redis:
+        image: redis:7
 
     nginx:
         image: nginx:1.25.4

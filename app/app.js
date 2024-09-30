@@ -1,10 +1,15 @@
 import express from "express";
 import dgram from "dgram";
-import https from "https";
 import axios from "axios";
+import { createClient } from "redis";
 
 const app = express();
 const port = 3000;
+const redisClient = createClient({ url: "redis://redis:6379" });
+
+(async () => {
+    await redisClient.connect();
+})();
 
 const sendMessage = (client, message) => {
     return new Promise((resolve, reject) => {
@@ -61,50 +66,85 @@ app.get("/ping", (req, res) => {
 });
 
 app.get("/quote", async (req, res) => {
-    const response = await axios.get(
-        "https://uselessfacts.jsph.pl/api/v2/facts/random"
-    );
+    let quote;
 
-    if (response.status === 200) {
-        console.log(response.data);
-        res.status(200).send(response.data["text"]);
+    const quoteString = await redisClient.get("quote");
+
+    if (quoteString !== null) {
+        quote = JSON.parse(quoteString);
     } else {
-        res.status(response.status).send(response.statusText);
+        const response = await axios.get(
+            "https://uselessfacts.jsph.pl/api/v2/facts/random"
+        );
+
+        if (response.status === 200) {
+            quote = response.data["text"];
+            await redisClient.set("quote", JSON.stringify(quote), {
+                EX: 5,
+            });
+        } else {
+            res.status(response.status).send(response.statusText);
+        }
     }
+    res.status(200).send(quote);
 });
 
 app.get("/spaceflight_news", async (req, res) => {
-    const response = await axios.get(
-        "https://api.spaceflightnewsapi.net/v4/articles/?limit=5"
-    );
+    let titles;
 
-    let titles = [];
+    const titlesString = await redisClient.get("space_news");
 
-    if (response.status === 200) {
-        response.data.results.forEach((e) => {
-            if (e.hasOwnProperty("title")) {
-                titles.push(e.title);
-            }
-        });
-        res.status(200).send(titles);
+    if (titlesString !== null) {
+        titles = JSON.parse(titlesString);
     } else {
-        res.status(response.status).send(response.statusText);
+        titles = [];
+
+        const response = await axios.get(
+            "https://api.spaceflightnewsapi.net/v4/articles/?limit=5"
+        );
+
+        if (response.status === 200) {
+            response.data.results.forEach((e) => {
+                if (e.hasOwnProperty("title")) {
+                    titles.push(e.title);
+                }
+            });
+
+            await redisClient.set("space_news", JSON.stringify(titles), {
+                EX: 5,
+            });
+        } else {
+            res.status(response.status).send(response.statusText);
+        }
     }
+    res.status(200).send(titles);
+});
+
+app.get("/dictionary", async (req, res) => {
+    const word = req.query.word;
+    let words = {};
+
+    const wordsString = await redisClient.get("dictionary");
+
+    if (wordsString !== null) {
+        words = JSON.parse(wordsString);
+    } else {
+        const response = await axios.get(
+            `http://api.dictionaryapi.dev/api/v2/entries/en/${word}`
+        );
+        if (response.status === 200) {
+            words[word] = response.data[0];
+
+            await redisClient.set("dictionary", JSON.stringify(words), {
+                EX: 5,
+            });
+        } else {
+            res.status(response.status).send(response.statusText);
+        }
+    }
+    res.status(200).send(words[word]);
 });
 
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
-});
-
-// API FREE DICTIONARY
-app.get("/dictionary", async (req, res) => {
-    const word = req.query.word;
-    const response = await axios.get(
-        `http://api.dictionaryapi.dev/api/v2/entries/en/${word}`
-    );
-    if (response.status === 200) {
-        res.status(200).send(response.data[0]);
-    } else {
-        res.status(response.status).send(response.statusText);
-    }
 });
