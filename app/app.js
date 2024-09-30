@@ -104,7 +104,6 @@ app.get("/dictionary", async (req, res) => {
     );
     if (response.status === 200) {
         const data = response.data[0];
-            // Extraer solo phonetics y meanings
         const result = {
             phonetics: data.phonetics,
             meanings: data.meanings,
