@@ -103,8 +103,14 @@ app.get("/dictionary", async (req, res) => {
         `http://api.dictionaryapi.dev/api/v2/entries/en/${word}`
     );
     if (response.status === 200) {
-        res.status(200).send(response.data[0]);
+        const data = response.data[0];
+            // Extraer solo phonetics y meanings
+        const result = {
+            phonetics: data.phonetics,
+            meanings: data.meanings,
+        };
+        res.status(200).send(result);
     } else {
-        res.status(response.status).send(response.statusText);
+            res.status(response.status).send(response.statusText);
     }
 });
