@@ -3,9 +3,25 @@ import dgram from "dgram";
 import https from "https";
 import axios from "axios";
 import StatsD from "hot-shots";
+import { rateLimit } from 'express-rate-limit'
+const RATE_LIMIT = false;
 const app = express();
 const port = 3000;
 
+// express rate limit
+
+const limiter = rateLimit({
+	windowMs: 10 * 1000, // 10 secs
+	limit: 10, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
+	// store: ... , // Redis, Memcached, etc. See below.
+})
+
+// Apply the rate limiting middleware to all requests.
+if (RATE_LIMIT) app.use(limiter)
+
+// statsd
 const client = new StatsD({
     host: 'tp1-arquitecturadelsoftware-graphite-1',
     port: 8125,                   
