@@ -1,7 +1,7 @@
 {
 	"_comment": "rate limiting is always inside a 10 second window",
-	"rate_limit": true,
-	"rate_limit_spaceflight_news": 20, 
-	"rate_limit_quote": 20, 
-	"rate_limit_dictionary": 20
+	"rate_limit": false,
+	"rate_limit_spaceflight_news": 70, 
+	"rate_limit_quote": 70, 
+	"rate_limit_dictionary": 70
 }
