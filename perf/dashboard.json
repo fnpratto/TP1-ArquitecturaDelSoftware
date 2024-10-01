@@ -138,16 +138,17 @@
                 "h": 7,
                 "w": 24,
                 "x": 0,
-                "y": 28
+                "y": 14
             },
             "height": "250px",
             "hiddenSeries": false,
-            "id": 6, 
+            "id": 7,
             "legend": {
                 "alignAsTable": true,
                 "avg": true,
                 "current": true,
                 "hideEmpty": true,
+                "hideZero": false,
                 "max": true,
                 "min": false,
                 "rightSide": true,
@@ -175,16 +176,126 @@
             "targets": [
                 {
                     "refCount": 0,
-                    "refId": "A",
-                    "target": "alias(stats.timers.project.ping.latency.count, 'Application Endpoint Latency')",
-                    "textEditor": false
+                    "refId": "C",
+                    "target": "alias(stats.timers.project.latencyExternal.upper, 'Upper API Latency')"
+                },
+                {
+                    "refCount": 0,
+                    "refId": "B",
+                    "target": "alias(stats.timers.project.latencyExternal.median, 'Median API Latency')"
                 }       
             ],
             "thresholds": [],
             "timeFrom": null,
             "timeRegions": [],
             "timeShift": null,
-            "title": "Latencia de Endpoints",
+            "title": "Latencia de API",
+            "tooltip": {
+                "shared": true,
+                "sort": 0,
+                "value_type": "individual"
+            },
+            "type": "graph",
+            "xaxis": {
+                "buckets": null,
+                "mode": "time",
+                "name": null,
+                "show": true,
+                "values": []
+            },
+            "yaxes": [
+                {
+                    "format": "ms",
+                    "label": "",
+                    "logBase": 1,
+                    "max": null,
+                    "min": "0",
+                    "show": true
+                },
+                {
+                    "format": "short",
+                    "label": null,
+                    "logBase": 1,
+                    "max": null,
+                    "min": null,
+                    "show": true
+                }
+            ],
+            "yaxis": {
+                "align": false,
+                "alignLevel": null
+            }
+        },
+        {
+            "aliasColors": {},
+            "bars": false,
+            "dashLength": 10,
+            "dashes": false,
+            "datasource": "Graphite",
+            "fieldConfig": {
+                "defaults": {
+                    "custom": {}
+                },
+                "overrides": []
+            },
+            "fill": 1,
+            "fillGradient": 0,
+            "gridPos": {
+                "h": 7,
+                "w": 24,
+                "x": 0,
+                "y": 14
+            },
+            "height": "250px",
+            "hiddenSeries": false,
+            "id": 3,
+            "legend": {
+                "alignAsTable": true,
+                "avg": true,
+                "current": true,
+                "hideEmpty": true,
+                "hideZero": false,
+                "max": true,
+                "min": false,
+                "rightSide": true,
+                "show": true,
+                "sideWidth": 250,
+                "total": false,
+                "values": true
+            },
+            "lines": true,
+            "linewidth": 1,
+            "links": [],
+            "nullPointMode": "connected",
+            "options": {
+                "alertThreshold": true
+            },
+            "percentage": false,
+            "pluginVersion": "7.3.10",
+            "pointradius": 5,
+            "points": true,
+            "renderer": "flot",
+            "seriesOverrides": [],
+            "spaceLength": 10,
+            "stack": false,
+            "steppedLine": false,
+            "targets": [
+                {
+                    "refCount": 0,
+                    "refId": "C",
+                    "target": "alias(stats.timers.project.latency.upper, 'Upper Application Endpoint Latency')"
+                },
+                {
+                    "refCount": 0,
+                    "refId": "B",
+                    "target": "alias(stats.timers.project.latency.median, 'Median Application Endpoint Latency')"
+                }       
+            ],
+            "thresholds": [],
+            "timeFrom": null,
+            "timeRegions": [],
+            "timeShift": null,
+            "title": "Latencia de Endpoint",
             "tooltip": {
                 "shared": true,
                 "sort": 0,
@@ -362,7 +473,7 @@
             },
             "height": "250px",
             "hiddenSeries": false,
-            "id": 3,
+            "id": 6,
             "legend": {
                 "alignAsTable": true,
                 "avg": true,
