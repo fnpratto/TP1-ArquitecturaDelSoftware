@@ -4,22 +4,27 @@ import https from "https";
 import axios from "axios";
 import StatsD from "hot-shots";
 import { rateLimit } from 'express-rate-limit'
-const RATE_LIMIT = false;
+import {readFileSync} from 'fs';
 const app = express();
 const port = 3000;
 
 // express rate limit
 
-const limiter = rateLimit({
-	windowMs: 10 * 1000, // 10 secs
-	limit: 10, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
-	standardHeaders: 'draft-7', // draft-6: `RateLimit-*` headers; draft-7: combined `RateLimit` header
-	legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
-	// store: ... , // Redis, Memcached, etc. See below.
-})
+
 
 // Apply the rate limiting middleware to all requests.
-if (RATE_LIMIT) app.use(limiter)
+let json = readFileSync("config_rate_limit.json")
+let config_rate_limit = JSON.parse(json)
+if (config_rate_limit.rate_limit == true) {
+    const limiter = rateLimit({
+        windowMs: 10 * 1000,
+        limit: config_rate_limit.rate_limit_spaceflight_news,
+        standardHeaders: 'draft-7',
+        legacyHeaders: false, 
+    })
+    app.use(limiter)
+}
+
 
 // statsd
 const client = new StatsD({
