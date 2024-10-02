@@ -1,0 +1,7 @@
+
+> perf@1.0.0 artillery
+> artillery run stress_testing/space_flight_news.yaml -e app
+
+Error: ENOENT: no such file or directory, open 'stress_testing/space_flight_news.yaml'
+ENOENT
+ENOENT: no such file or directory, open 'stress_testing/space_flight_news.yaml'
