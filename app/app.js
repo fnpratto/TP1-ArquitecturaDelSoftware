@@ -12,17 +12,39 @@ const port = 3000;
 
 
 
-// Apply the rate limiting middleware to all requests.
+// Apply the rate limiting middleware to certain endpoints
 let json = readFileSync("config_rate_limit.json")
 let config_rate_limit = JSON.parse(json)
+
 if (config_rate_limit.rate_limit == true) {
-    const limiter = rateLimit({
+    const limiter_space = rateLimit({
         windowMs: 10 * 1000,
         limit: config_rate_limit.rate_limit_spaceflight_news,
         standardHeaders: 'draft-7',
         legacyHeaders: false, 
     })
-    app.use(limiter)
+    const limiter_ping = rateLimit({
+        windowMs: 10 * 1000,
+        limit: config_rate_limit.rate_limit_ping,
+        standardHeaders: 'draft-7',
+        legacyHeaders: false, 
+    })
+    const limiter_dict = rateLimit({
+        windowMs: 10 * 1000,
+        limit: config_rate_limit.rate_limit_quote,
+        standardHeaders: 'draft-7',
+        legacyHeaders: false, 
+    })
+    const limiter_quote = rateLimit({
+        windowMs: 10 * 1000,
+        limit: config_rate_limit.rate_limit_dictionary,
+        standardHeaders: 'draft-7',
+        legacyHeaders: false, 
+    })
+    app.use('/ping', limiter_ping)
+    app.use('/quote', limiter_quote)
+    app.use('/spaceflight_news', limiter_space)
+    app.use('/dictionary', limiter_dict)
 }
 
 
@@ -42,7 +64,7 @@ const sendMetric = (metricName, value) => {
     }
 }
 
-  const measureLatency = (start, metricName) => {
+const measureLatency = (start, metricName) => {
     const duration = Date.now() - start;
     sendMetric(metricName, duration);
 };

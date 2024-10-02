@@ -3,5 +3,6 @@
 	"rate_limit": true,
 	"rate_limit_spaceflight_news": 70, 
 	"rate_limit_quote": 70, 
-	"rate_limit_dictionary": 70
+	"rate_limit_dictionary": 70,
+	"rate_limit_ping": 70
 }
