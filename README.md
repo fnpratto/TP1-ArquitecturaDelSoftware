@@ -1,23 +1,12 @@
-# Punto de partida para el TP 1 de Arquitectura del Software (75.73/TB054) del 2do cuatrimestre de 2024
+# TP 1 de Arquitectura del Software (75.73/TB054) del 2do cuatrimestre de 2024
 
-> **La fecha de entrega para el informe y el código es el jueves 03/10** :bangbang:
+[Link overleaf informe](https://www.overleaf.com/project/66f9eb4b56de8e55b06fbc91)
 
-La forma de entrega será a través de un canal **privado** del grupo en Slack, al que deben invitar a los docentes. Deben poner ahí un link al repositorio con el código y el informe (o avisar si está en el repositorio).
+> **Entrega :03/10** 
 
-El informe debe entregarse en formato PDF. **Debe** incluir screenshots del dashboard de métricas para cada caso analizado que permitan observar los resultados obtenidos y **debe** incluir una **vista Components & Connectors** para los distintos casos estudiados.
+Este trabajo práctico tiene como objetivo principal comparar diversas tecnologías y evaluar cómo diferentes aspectos impactan en los atributos de calidad de un sistema. Al explorar este tema, buscamos no solo identificar las mejores prácticas y herramientas, sino también entender el impacto de las decisiones tecnológicas en el rendimiento y la confiabilidad de los servicios.
 
-## Objetivos
-
-El objetivo principal es comparar algunas tecnologías, ver cómo diversos aspectos impactan en los atributos de calidad y probar qué cambios se podrían hacer para mejorarlos.
-El objetivo menor es que aprendan a usar una variedad de tecnologías útiles y muy usadas hoy en día, incluyendo:
-
-- Node.js (+ Express)
-- Docker
-- Docker Compose
-- Nginx
-- Redis
-- Algún generador de carga (la propuesta es usar Artillery, pero pueden cambiarlo)
-- Alguna forma de tomar mediciones varias y visualizarlas, preferentemente en tiempo real, con persistencia, y en un dashboard unificado (la propuesta es usar el plugin de Artillery + cAdvisor + StatsD + Graphite + Grafana, pero pueden cambiarlo).
+A lo largo de este TP, nos enfocaremos en una serie de tecnologías ampliamente utilizadas en la industria, incluyendo Node.js con Express para la construcción de APIs, Docker y Docker Compose para la containerización y gestión de servicios, Nginx como servidor proxy y balanceador de carga, y Redis para el almacenamiento en caché. También utilizaremos Artillery como generador de carga para simular distintos escenarios de tráfico, y herramientas como cAdvisor, StatsD, Graphite y Grafana para la recolección y visualización de métricas en tiempo real.
 
 ## Consigna
 
@@ -63,11 +52,6 @@ Ver [documentación de la API](https://api.spaceflightnewsapi.net/v4/docs/)
 
 Devolveremos 1 cita famosa con su autor (ningún otro dato) al azar por cada invocación, tomada de [Quotable](https://github.com/lukePeavey/quotable). Debe evitarse entregar la misma cita cada vez (salvo que la repita la API remota).
 
-#### APIs opcionales
-
-Pueden agregar más endpoints que consulten a otras APIs. Para buscar APIs que sean gratuitas y de uso público, pueden consultar [aquí](https://github.com/public-apis/public-apis).
-
-> **Importante**: Es preferible hacer un buen análisis de lo obligatorio en vez de agregar más APIs con un análisis superficial. Solo agreguen opcionales si terminaron de manera consistente con lo obligatorio, siendo también consistentes con lo que agreguen.
 
 ### Tácticas
 
@@ -98,164 +82,29 @@ Escalarán el servicio a 3 copias, convirtiendo a nginx en un load balancer.
 
 Deberán experimentar con una solución que limite el rate de consumo de la API. Pueden ver [express-rate-limit](https://www.npmjs.com/package/express-rate-limit) o [cómo hacerlo con nginx](https://www.nginx.com/blog/rate-limiting-nginx/). No es necesario que prueben ambas, alcanza con una.
 
-#### Tácticas opcionales
+### Generación de carga para las pruebas y métricas 
 
-Pueden probar otras tácticas, pero recuerden que es mejor ser consistentes con lo que entregan y que no se puede cambiar algo obligatorio por algo opcional.
+1. **Escenarios lanzados (stacked)**
+   - Total de escenarios lanzados
+   - Escenarios individuales en ejecución
 
-### Generación de carga para las pruebas
+2. **Estado de las solicitudes (stacked)**
+   - Solicitudes completadas (códigos 200)
+   - Solicitudes pendientes
+   - Errores en las solicitudes
+   - Solicitudes limitadas (códigos 429)
 
-> **Importante**: Generen valores de carga que tengan relación con los tiempos que ven en la aplicación. No agrega valor que generen una carga enorme y luego cueste saber cuál de todos los componentes está fallando. Vayan de a poco con la carga y verifiquen cómo se van afectando los atributos de calidad.
-> Analicen cada endpoint por separado. Si generan escenarios que los recorren juntos costará determinar dónde optimizar.
+3. **Tiempos de respuesta (client-side)**
+   - Duración máxima de los tiempos de respuesta
+   - Mediana de los tiempos de respuesta
 
-Hay muchos tipos de escenarios de carga y pruebas de performance en general. Pueden leer por ejemplo [aquí](https://www.softwaretestingclass.com/what-is-performance-testing/) (o en cualquiera de los miles de links al googlear sobre el tema) sobre algunos tipos de escenarios que pueden implementar. Queda a decisión de cada grupo elegirlos, considerando siempre cuál es el que más útil les resulta para analizar lo que quieran estudiar.
+IMPORTANTE:
 
-Tengan en cuenta que, en el caso del diccionario, la carga generada **debe enviar distintas palabras** cuando simulen los pedidos de los clientes. Vean formas de hacerlo [aquí](https://www.artillery.io/docs/guides/guides/test-script-reference#payload---loading-data-from-csv-files) y [aquí](https://www.artillery.io/docs/guides/guides/test-script-reference#variables---inline-variables).
+1. **Demora de cada endpoint en responder**
+   - Tiempo total de respuesta (API remota + procesamiento propio)
 
-### Métricas propias
+2. **Demora de cada API remota en responder**
+   - Tiempo de respuesta de la API remota
 
-Deberán generar las siguientes métricas, que se agregarán como gráficos adicionales a los que les damos en el dashboard:
-
-- Demora de cada endpoint en responder (esto es, API remota + procesamiento propio)
-- Demora de cada API remota en responder (solo API remota)
 
 Pueden usar [hot-shots](https://www.npmjs.com/package/hot-shots)
-
-## Aclaraciones sobre la entrega
-
-1. El trabajo debe entregarse **completo**. No se aceptan entregas parciales.
-2. Asumimos que todo el grupo participa en la resolución del trabajo. De ocurrir problemas o surgir contratiempos, es el grupo quien debe responder y solucionarlos. Pueden consultar a los docentes pero deben demostrar primero que intentaron solucionarlos internamente.
-3. De haber defectos importantes en el desarrollo o en el informe del TP, se solicitará una re-entrega. Esto tiene un impacto considerable en la nota final, por lo que les recomendamos que controlen entre todo el grupo el cumplimiento del enunciado, las conclusiones y las justificaciones antes de entregar el trabajo.
-
------------
-
-## Links útiles
-
-- Node.js:
-  - https://nodejs.org/
-  - https://github.com/creationix/nvm
-- Express:
-  - https://expressjs.com/en/starter/hello-world.html
-- Nginx:
-  - https://nginx.org/
-- Redis:
-  - https://redis.io/
-  - https://www.npmjs.com/package/redis
-- Docker:
-  - https://docker-k8s-lab.readthedocs.io/en/latest/docker/docker-engine.html
-  - https://www.docker.com/
-- Docker-compose:
-  - https://docs.docker.com/compose/
-- StatsD:
-  - https://github.com/etsy/statsd
-  - https://github.com/etsy/statsd/blob/master/docs/graphite.md
-- Graphite:
-  - https://graphiteapp.org/
-  - https://graphite.readthedocs.io/en/latest/
-- Grafana:
-  - https://grafana.com/
-  - https://docs.grafana.org/guides/getting_started/
-- Imagen usada (statsd + graphite):
-  - https://hub.docker.com/r/graphiteapp/graphite-statsd/
-  - https://github.com/graphite-project/docker-graphite-statsd
-- Gotchas:
-  - http://dieter.plaetinck.be/post/25-graphite-grafana-statsd-gotchas/
-- Artillery:
-  - https://artillery.io/docs/
-  - https://www.npmjs.com/package/artillery
-  - https://www.npmjs.com/package/artillery-plugin-statsd
-- JMeter:
-  - https://jmeter.apache.org/
-- Artículos sobre generación de carga:
-  - https://queue-it.com/blog/load-vs-stress-testing/
-  - https://www.artillery.io/blog/load-testing-workload-models
-
-## Pequeño cheatsheet de docker
-
-Es posible que necesiten ejecutar los comandos con `sudo`, según el sistema que usen y cómo lo hayan instalado.
-
-```sh
-# Ver qué containers existen
-docker ps [-a]
-
-# Ver qué imagenes hay en mi máquina
-docker images
-
-# Ver uso de recursos de containers (como "top" en linux)
-# Ejemplo con formato específico: docker stats --format '{{.Name}}\t{{.ID}}\t{{.CPUPerc}}\t{{.MemUsage}}'
-docker stats [--format <format_string>]
-
-# Descargar una imagen
-docker pull <image>[:<tag>]
-
-# Eliminar un container
-docker rm <container_id> [-f]
-
-# Eliminar una imagen
-docker rmi <image_id> [-f]
-
-# Eliminar imágenes "colgadas" (dangling)
-docker rmi $(docker images -q -f dangling=true)
-
-# Versión instalada
-docker version
-```
-
-## Pequeño cheatsheet de docker-compose
-
-Todos los siguientes comandos deben ejecutarse desde la carpeta en donde está el archivo `docker-compose.yml` del proyecto.
-
-Es posible que necesiten ejecutar los comandos con `sudo`, según el sistema que usen y cómo lo hayan instalado.
-
-```sh
-# ALIAS para escribir menos
-alias docc='docker-compose'
-
-# Ayuda general
-docc --help
-
-# Ayuda genral para cualquier comando
-docc [COMMAND] --help
-
-# Levantar servicios.
-# Sugerencia: Usar la opción -d para levantar en background, y poder seguir usando la terminal
-# También sirve para escalar horizontalmente un servicio que ya se esté ejecutando [buscar opción --scale].
-# Si no se especifica al menos un servicio, se levantan todos
-docc up [options] [SERVICE...]
-
-# Ver logs de un servicio ejecutándose en background
-docc logs [options] [SERVICE]
-
-# Listar containers y sus estados
-docc ps
-
-# Restartear servicios
-# Si no se indica al menos un servicio, se restartean todos
-docc restart [SERVICE...]
-
-# Frenar servicios corriendo en background (con la opción --detach del `up`)
-# Si no se lista ningún servicio, se frenan todos.
-# Esto solo frena servicio, no borra el container ni los datos que hayan en el mismo
-docc stop [SERVICE...]
-
-# Frenar containers y borrar tanto los containers como las imágenes y los volúmenes de almacenamiento
-# (se pierden todos los datos que hubiera en el container).
-# Esto aplica a TODOS los levantados con `up`, no filtra por servicio
-docc down
-
-# Levantar un nuevo container de un servicio y ejecutar un comando adentro
-# (util para tener por ejemplo una terminal dentro de un container e inspeccionarlo o hacer pruebas manuales).
-# Como es siempre sobre un container nuevo, lo que ven es el resultado de su docker-compose.yml y sus dockerfiles
-# Ejemplo: docc run graphite bash
-docc run SERVICE COMMAND
-
-# Correr un comando en un container que ya existe y ya está corriendo.
-# Parecido a `run` pero sobre un container en ejecución.
-# Útil para alterar o inspeccionar algo que se está ejecutando.
-#Lo que ven adentro puede no ser el resultado directo del docker-compose.yml + dockerfiles, así que mucho cuidado
-# si van a modificar sus containers así, porque puede ser difícil de reproducir luego.
-# Ejemplo: docc exec graphite bash
-docc exec SERVICE COMMAND
-
-# Versión instalada
-docc version
-```
