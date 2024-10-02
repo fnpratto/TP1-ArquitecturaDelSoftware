@@ -52,6 +52,9 @@ app.get("/quote", async (req, res) => {
         } else {
             res.status(response.status).send(response.statusText);
         }
+    } catch (error) {
+        console.error("Error fetching quote:", error);
+        res.status(500).send("Internal Server Error");
     } finally {
         measureLatency(start, "latency");
     }
@@ -94,23 +97,23 @@ app.get("/dictionary", async (req, res) => {
     const start = Date.now();
     const word = req.query.word;
 
-    try {
-        const response = await axios.get(
-            `http://api.dictionaryapi.dev/api/v2/entries/en/${word}`
-        );
-        measureLatency(start, "latencyExternal");
-
-        if (response.status === 200) {
-            const data = response.data[0];
-            const result = {
-                phonetics: data.phonetics,
-                meanings: data.meanings,
-            };
-            res.status(200).send(result);
-        } else {
-            res.status(response.status).send(response.statusText);
-        }
-    } finally {
-        measureLatency(start, "latency");
-    }
+    const response = await axios
+        .get(`http://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+        .then((response) => {
+            if (response.status === 200) {
+                const data = response.data[0];
+                const result = {
+                    phonetics: data.phonetics,
+                    meanings: data.meanings,
+                };
+                res.status(200).send(result);
+            } else {
+                res.status(response.status).send(response.statusText);
+            }
+            measureLatency(start, "latency");
+        })
+        .catch((error) => {
+            res.status(error.response.status).send(error.response.data);
+        })
+        .finally(measureLatency(start, "latencyExternal"));
 });
