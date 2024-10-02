@@ -19,7 +19,17 @@ config:
     phases:
         - name: WarmUp
           duration: 30
-          arrivalRate: 1
+          arrivalRate: 5
+        - name: Ramp
+          duration: 30
+          arrivalRate: 5
+          rampTo: 20
+        - name: Plain
+          duration: 60
+          arrivalRate: 20
+        - name: CoolDown
+          duration: 30
+          arrivalRate: 5
 
 scenarios:
     - name: dictionary (/dictionary)
