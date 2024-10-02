@@ -17,10 +17,10 @@ config:
         - name: Ramp
           duration: 30
           arrivalRate: 5
-          rampTo: 15
+          rampTo: 40
         - name: Plain
           duration: 60
-          arrivalRate: 15
+          arrivalRate: 40
         - name: CoolDown
           duration: 30
           arrivalRate: 5

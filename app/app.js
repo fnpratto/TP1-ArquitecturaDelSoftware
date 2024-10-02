@@ -98,13 +98,17 @@ app.listen(port, () => {
 
 // API FREE DICTIONARY
 app.get("/dictionary", async (req, res) => {
-    const word = req.query.word;
-    const response = await axios.get(
-        `http://api.dictionaryapi.dev/api/v2/entries/en/${word}`
-    );
-    if (response.status === 200) {
-        res.status(200).send(response.data[0]);
-    } else {
-        res.status(response.status).send(response.statusText);
+    try {
+        const word = req.query.word;
+        const response = await axios.get(
+            `http://api.dictionaryapi.dev/api/v2/entries/en/${word}`
+        );
+        if (response.status === 200) {
+            res.status(200).send(response.data[0]);
+        } else {
+            res.status(response.status).send(response.statusText);
+        }
+    } catch (error) {
+        console.log("pum - " + error.response.status);
     }
 });
