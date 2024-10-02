@@ -1,6 +1,5 @@
 import express from "express";
 import dgram from "dgram";
-import https from "https";
 import axios from "axios";
 
 const app = express();
