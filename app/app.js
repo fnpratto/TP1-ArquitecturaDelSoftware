@@ -73,7 +73,9 @@ app.get("/spaceflight_news", async (req, res) => {
             measureLatency(start, "latency");
         })
         .catch((error) => {
-            res.status(error.response.status).send(error.response.data);
+            if (error.response != undefined) {
+                res.status(error.response.status).send(error.response.data);
+            }
         })
         .finally(measureLatency(start, "latencyExternal"));
 });
