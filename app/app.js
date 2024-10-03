@@ -63,7 +63,7 @@ const sendMetric = (metricName, value) => {
     if (!isNaN(value)) {
         client.timing(`project.${metricName}`, value);
     }
-}
+};
 
 const measureLatency = (start, metricName) => {
     const duration = Date.now() - start;
@@ -98,26 +98,30 @@ app.get("/quote", async (req, res) => {
 
     if (quoteString !== null) {
         quote = JSON.parse(quoteString);
-    } else {
-        const response = await axios.get(
-            "https://uselessfacts.jsph.pl/api/v2/facts/random"
-        );
         measureLatency(start, "latency");
-
-        if (response.status === 200) {
-            quote = response.data["text"];
-            await redisClient.set("quote", JSON.stringify(quote), {
-                EX: 5,
-            });
-        } else {
-            res.status(response.status).send(response.statusText);
-        }
+        res.status(200).send(quote);
+        measureLatency(start, "latencyExternal");
+    } else {
+        const response = await axios
+            .get("https://uselessfacts.jsph.pl/api/v2/facts/random")
+            .then(async (response) => {
+                if (response.status === 200) {
+                    quote = response.data["text"];
+                    await redisClient.set("quote", JSON.stringify(quote), {
+                        EX: 5,
+                    });
+                } else {
+                    res.status(response.status).send(response.statusText);
+                }
+                res.status(200).send(quote);
+                measureLatency(start, "latency");
+            })
+            .catch((error) => {
+                res.status(error.response.status).send(error.response.data);
+            })
+            .finally(measureLatency(start, "latencyExternal"));
     }
-    res.status(200).send(quote);
-    measureLatency(start, "latencyExternal");
-
 });
-
 
 app.get("/spaceflight_news", async (req, res) => {
     const start = Date.now();
@@ -127,30 +131,40 @@ app.get("/spaceflight_news", async (req, res) => {
 
     if (titlesString !== null) {
         titles = JSON.parse(titlesString);
+        measureLatency(start, "latency");
+        res.status(200).send(titles);
+        measureLatency(start, "latencyExternal");
     } else {
         titles = [];
 
-        const response = await axios.get(
-            "https://api.spaceflightnewsapi.net/v4/articles/?limit=5"
-        );
-        measureLatency(start, "latency");
+        const response = await axios
+            .get("https://api.spaceflightnewsapi.net/v4/articles/?limit=5")
+            .then(async (response) => {
+                if (response.status === 200) {
+                    response.data.results.forEach((e) => {
+                        if (e.hasOwnProperty("title")) {
+                            titles.push(e.title);
+                        }
+                    });
 
-        if (response.status === 200) {
-            response.data.results.forEach((e) => {
-                if (e.hasOwnProperty("title")) {
-                    titles.push(e.title);
+                    await redisClient.set(
+                        "space_news",
+                        JSON.stringify(titles),
+                        {
+                            EX: 5,
+                        }
+                    );
+                } else {
+                    res.status(response.status).send(response.statusText);
                 }
-            });
-
-            await redisClient.set("space_news", JSON.stringify(titles), {
-                EX: 5,
-            });
-        } else {
-            res.status(response.status).send(response.statusText);
-        }
+                res.status(200).send(titles);
+                measureLatency(start, "latency");
+            })
+            .catch((error) => {
+                res.status(error.response.status).send(error.response.data);
+            })
+            .finally(measureLatency(start, "latencyExternal"));
     }
-    res.status(200).send(titles);
-    measureLatency(start, "latencyExternal");
 });
 
 app.get("/dictionary", async (req, res) => {
@@ -160,26 +174,32 @@ app.get("/dictionary", async (req, res) => {
 
     const wordsString = await redisClient.get("dictionary");
 
-
     if (wordsString !== null) {
         words = JSON.parse(wordsString);
-    } else {
-        const response = await axios.get(
-            `http://api.dictionaryapi.dev/api/v2/entries/en/${word}`
-        );
         measureLatency(start, "latency");
-        if (response.status === 200) {
-            words[word] = response.data[0];
+        res.status(200).send(words);
+        measureLatency(start, "latencyExternal");
+    } else {
+        const response = await axios
+            .get(`http://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+            .then(async (response) => {
+                if (response.status === 200) {
+                    words[word] = response.data[0];
 
-            await redisClient.set("dictionary", JSON.stringify(words), {
-                EX: 5,
-            });
-        } else {
-            res.status(response.status).send(response.statusText);
-        }
+                    await redisClient.set("dictionary", JSON.stringify(words), {
+                        EX: 5,
+                    });
+                } else {
+                    res.status(response.status).send(response.statusText);
+                }
+                res.status(200).send(words[word]);
+                measureLatency(start, "latency");
+            })
+            .catch((error) => {
+                res.status(error.response.status).send(error.response.data);
+            })
+            .finally(measureLatency(start, "latencyExternal"));
     }
-    res.status(200).send(words[word]);
-    measureLatency(start, "latencyExternal");
 });
 
 app.listen(port, () => {
