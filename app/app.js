@@ -36,53 +36,48 @@ app.get("/ping", (req, res) => {
 
 app.get("/quote", async (req, res) => {
     const start = Date.now();
-    const response = await axios.get(
-        "https://uselessfacts.jsph.pl/api/v2/facts/random"
-    );
-    measureLatency(start, "latencyExternal");
-
-    try {
-        const response = await axios.get(
-            "https://uselessfacts.jsph.pl/api/v2/facts/random"
-        );
-
-        if (response.status === 200) {
-            console.log(response.data);
-            res.status(200).send(response.data["text"]);
-        } else {
-            res.status(response.status).send(response.statusText);
-        }
-    } finally {
-        measureLatency(start, "latency");
-    }
+    const response = await axios
+        .get("https://uselessfacts.jsph.pl/api/v2/facts/random")
+        .then((response) => {
+            if (response.status === 200) {
+                console.log(response.data);
+                res.status(200).send(response.data["text"]);
+            } else {
+                res.status(response.status).send(response.statusText);
+            }
+            measureLatency(start, "latency");
+        })
+        .catch((error) => {
+            res.status(error.response.status).send(error.response.data);
+        })
+        .finally(measureLatency(start, "latencyExternal"));
 });
 
 app.get("/spaceflight_news", async (req, res) => {
     const start = Date.now();
-    try {
-        const response = await axios.get(
-            "https://api.spaceflightnewsapi.net/v4/articles/?limit=5"
-        );
-        measureLatency(start, "latencyExternal");
+    const response = await axios
+        .get("https://api.spaceflightnewsapi.net/v4/articles/?limit=5")
+        .then((response) => {
+            let titles = [];
 
-        let titles = [];
-
-        if (response.status === 200) {
-            response.data.results.forEach((e) => {
-                if (e.hasOwnProperty("title")) {
-                    titles.push(e.title);
-                }
-            });
-            res.status(200).send(titles);
-        } else {
-            res.status(response.status).send(response.statusText);
-        }
-    } catch (error) {
-        console.error("Error fetching spaceflight news:", error);
-        res.status(500).send("Internal Server Error");
-    } finally {
-        measureLatency(start, "latency");
-    }
+            if (response.status === 200) {
+                response.data.results.forEach((e) => {
+                    if (e.hasOwnProperty("title")) {
+                        titles.push(e.title);
+                    }
+                });
+                res.status(200).send(titles);
+            } else {
+                res.status(response.status).send(response.statusText);
+            }
+            measureLatency(start, "latency");
+        })
+        .catch((error) => {
+            if (error.response != undefined) {
+                res.status(error.response.status).send(error.response.data);
+            }
+        })
+        .finally(measureLatency(start, "latencyExternal"));
 });
 
 app.listen(port, () => {
@@ -94,23 +89,23 @@ app.get("/dictionary", async (req, res) => {
     const start = Date.now();
     const word = req.query.word;
 
-    try {
-        const response = await axios.get(
-            `http://api.dictionaryapi.dev/api/v2/entries/en/${word}`
-        );
-        measureLatency(start, "latencyExternal");
-
-        if (response.status === 200) {
-            const data = response.data[0];
-            const result = {
-                phonetics: data.phonetics,
-                meanings: data.meanings,
-            };
-            res.status(200).send(result);
-        } else {
-            res.status(response.status).send(response.statusText);
-        }
-    } finally {
-        measureLatency(start, "latency");
-    }
+    const response = await axios
+        .get(`http://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
+        .then((response) => {
+            if (response.status === 200) {
+                const data = response.data[0];
+                const result = {
+                    phonetics: data.phonetics,
+                    meanings: data.meanings,
+                };
+                res.status(200).send(result);
+            } else {
+                res.status(response.status).send(response.statusText);
+            }
+            measureLatency(start, "latency");
+        })
+        .catch((error) => {
+            res.status(error.response.status).send(error.response.data);
+        })
+        .finally(measureLatency(start, "latencyExternal"));
 });
