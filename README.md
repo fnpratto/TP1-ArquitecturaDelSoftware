@@ -10,5 +10,7 @@ A lo largo de este TP, nos enfocaremos en una serie de tecnologías ampliamente 
 
 ## Integrantes
 Martin Andrés Maddalena
+
 María Fernanda Pont Tovar
+
 Florencia Pratto
