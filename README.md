@@ -1,7 +1,5 @@
 # TP 1 de Arquitectura del Software (75.73/TB054) del 2do cuatrimestre de 2024
 
-[Link overleaf informe](https://www.overleaf.com/project/66f9eb4b56de8e55b06fbc91)
-
 > **Entrega :03/10** 
 
 Este trabajo práctico tiene como objetivo principal comparar diversas tecnologías y evaluar cómo diferentes aspectos impactan en los atributos de calidad de un sistema. Al explorar este tema, buscamos no solo identificar las mejores prácticas y herramientas, sino también entender el impacto de las decisiones tecnológicas en el rendimiento y la confiabilidad de los servicios.
